@@ -1,7 +1,3 @@
-Here's an updated version of your `README.md` with the correct GPL-3.0 license:
-
----
-
 # PRC Data Challenge - Actual TakeOff Weight (ATOW) Prediction
 
 ## Overview
@@ -154,5 +150,3 @@ Submit your models for evaluation through the challenge submission platform. Mod
 This project is licensed under the **GNU General Public License v3.0**. You may obtain a copy of the license at [GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
 ---
-
-This version includes the correct license section referring to GPL-3.0. You can adjust the repository link and any additional details as needed for your specific project setup.
