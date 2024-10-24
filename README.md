@@ -68,11 +68,7 @@ Each trajectory file contains:
   - Wind (`u_component_of_wind`, `v_component_of_wind`) [m/s]
   - Temperature [Kelvin]
 
-Files are named in the format `<yyyy-mm-dd>.parquet` and contain all position reports for that date in UTC.
-
-### Important Notes:
-- Some flights span multiple `.parquet` files due to crossing UTC midnight.
-- Trajectories may not perfectly match the flight list times due to incomplete ADS-B coverage. The interval `[actual_offblock_time + taxiout_time, arrival_time]` approximates the flight's in-air portion.
+Files are named in the format `<yyyy-mm-dd>.parquet` and contain all position reports for that date in UTC..
 
 ## Getting Started
 
@@ -139,7 +135,12 @@ poetry update
 
 
 ### Data
-Download the provided flight list and trajectory parquet files and store them in the `data/` directory. 
+An access was granted to the participants of the challenge trought MinIO Client . 
+The dataset files are hosted on OSN infrastructure.
+Upon registration of your team you should have received the relevant
+
+* team name and ID
+* BUCKET_ACCESS_KEY and BUCKET_ACCESS_SECRET.
 
 ## Model Submission
 
