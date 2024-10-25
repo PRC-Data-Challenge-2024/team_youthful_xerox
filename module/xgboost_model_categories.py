@@ -153,7 +153,7 @@ def xgboost_subgroup_models(use_traffic=True):
             df_mean_per_aircraft = retreive_means()
             test_df = X_sub_group.merge(df_mean_per_aircraft, on='aircraft_type', how='left', suffixes=('', '_mean'))
             test_df['tow'] = test_df['tow_mean'] - test_df['tow_diff_pred']
-            test_df[["flight_id", "tow"]].astype(int).to_csv(f"./submission_files/team_youthful_xerox_{subgroup}_v9.csv", index=False)
+            test_df[["flight_id", "tow"]].astype(int).to_csv(f"./submission_files/team_youthful_xerox_{subgroup}_vX.csv", index=False)
 
     return results
 
