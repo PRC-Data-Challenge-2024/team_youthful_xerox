@@ -172,6 +172,66 @@ The model used in this challenge is an [XG Boost](https://xgboost.readthedocs.io
 
 XGBoost is an optimized distributed gradient boosting library designed to be highly efficient, flexible and portable. XGBoost is ideal for ATOW prediction due to its ability to handle complex, non-linear relationships across these diverse features. It efficiently manages both categorical and continuous variables, which is beneficial for combining static factors like aircraft type with dynamic ones such as weather and flight parameters.
 
+## Run the experiements 
+We provide script that performs data preparation, feature engineering, and XGBoost-based regression modeling to predict the takeoff weight (TOW) of flights using Optuna for hyperparameter optimization. The final model's predictions are saved in a CSV file, and feature importance is visualized for analysis.
+Configuration File
+
+The script reads a configuration file located at `configs/credentials.json`, which must contain:
+
+{
+    "team_name": "your_team_name",
+    "code": "your_code",
+    "output_folder": "your_output_folder"
+}
+
+For feature engineering , we tried many different approaches in general we distinguishe between two :
+* General feature extract:
+  This is a simpler and more straightforward method for extracting features from trajectory data. In this approach, we analyze each signal in the dataset and extract basic statistics, including the mean, maximum, and standard deviation
+  ### Usage
+  Run the script using:
+  ```bash
+  python feature_extractor/general_feature_extractor.py
+  ```
+
+* Climb & takeoff segmentation:
+  This method focuses on extracting statistics from the takeoff and climb phases. In the literature, many papers confirm that the Take-Off Weight (TOW) is strongly related to the vertical rate and speed of the aircraft during the early stages of flight. Therefore, we focused on segmenting this particular phase using a handcrafted method that considers various types of noise that may occur in the data, as well as occasional missing chunks in some trajectory data.
+  ### Usage
+  Run the script using:
+  ```bash
+  python feature_extractor/general_feature_extractor.py
+  ```
+  Note: There are some parameters in this script that were setup intuitively and they can be different depending on the dataset (vertical_rate_threshold : Threshold for vertical rate min_duration_threshold_minutes : Minimum takeoff duration in minutes). We suggested these value after an extensive analysis of the Trajectory data.
+
+### Train description 
+Main function for model training and tuning:
+* Defines an Optuna objective function for optimizing model hyperparameters.
+* Trains an XGBoost model using the best-found parameters.
+* Evaluates the model and calculates RMSE.
+* Generates feature importance plots.
+
+Run the script using:
+```bash
+python module/xgboost_model.py
+```
+This methods can work very well on balanced dataset. But the challenge_set showed a unblaced represtation of each aircraft_type therefore we suggest a new method where instead of prediction the TOW diretly we try to predict the (mean(TOW@ChallengeSet)-TOW). This methods boosted considerable our performance in the final submission_set.
+
+Before running the train script we need some inputs that are going to be given using this script : 
+```bash
+python module/pre_processing.py
+```
+Then run the final script using:
+```bash
+python module/xgboost_mean_diff.py
+```
+On the other hand due to the class imbalance in the dataset we tought about another approach that can boost the perforamnce of the model. This approach is based on creating multiple model for multiple aircraft_types.
+Try this approach using using:
+```bash
+python module/xgboost_model_categories.py
+```
+Notes: 
+* You can re-define the sub-categories that you want to use depending on the objectives.
+* This methodes uses the xgboost_mean_diff's approach to compute TOW
+
 ## Model Submission
 
 Submit your models for evaluation through the challenge submission platform. Models will be evaluated based on their ability to accurately predict the **Actual TakeOff Weight (ATOW)** for the flights in the provided dataset. Intermediate rankings will be done using **submission_set.csv**.

@@ -171,9 +171,6 @@ def process_flight(
     flight_id,
     vertical_rate_threshold,
     min_duration_threshold_minutes,
-    noise_tolerance,
-    plot_output_dir=None,
-    enable_plotting=True,
 ):
 
     # Sort the flight's data by timestamp
@@ -255,7 +252,6 @@ def process_parquet_file_lazy(
     file,
     vertical_rate_threshold=500,
     min_duration_threshold_minutes=1,
-    noise_tolerance=50,
     plot_output_dir=None,
     enable_plotting=True,
 ):
@@ -290,7 +286,6 @@ def process_parquet_file_lazy(
                 flight_id,
                 vertical_rate_threshold,
                 min_duration_threshold_minutes,
-                noise_tolerance,
                 plot_output_dir,
                 enable_plotting,
             )
@@ -313,7 +308,6 @@ def process_parquet_file_lazy(
 def extract_takeoff_features_lazy(
     directory_path,
     output_path,
-    noise_tolerance=50,
     vertical_rate_threshold=500,
     min_duration_threshold_minutes=1,
     plot_output_dir=None,
@@ -336,7 +330,6 @@ def extract_takeoff_features_lazy(
             file,
             vertical_rate_threshold,
             min_duration_threshold_minutes,
-            noise_tolerance,
             plot_output_dir,
             enable_plotting,
         )
@@ -381,13 +374,12 @@ plot_output_dir = (
 )
 vertical_rate_threshold = 500  # Threshold for vertical rate
 min_duration_threshold_minutes = 1.5  # Minimum takeoff duration in minutes
-noise_tolerance = 800  # Allowed noise for small decreases in
+
 
 # This will process each file, segment the signal based on the vertical rate threshold, and extract features
 extract_takeoff_features_lazy(
     directory_path,
     output_path,
-    noise_tolerance,
     vertical_rate_threshold,
     min_duration_threshold_minutes,
     plot_output_dir,
