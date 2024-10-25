@@ -2,11 +2,8 @@ import pandas as pd
 import numpy as np
 from xgboost import XGBRegressor
 from xgboost import plot_importance
-from sklearn.preprocessing import OrdinalEncoder
 from sklearn.metrics import root_mean_squared_error
-from sklearn.preprocessing import TargetEncoder
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 import optuna
 import os
@@ -28,7 +25,6 @@ def explore_flight():
 
     df["month"] = pd.to_datetime(df["date"]).dt.month
     df["dayofweek"] = pd.to_datetime(df["date"]).dt.dayofweek
-    #df[["year", "week", "day"]] = pd.to_datetime(df["date"]).dt.isocalendar()
     return df
 
 
@@ -37,7 +33,7 @@ def get_data(use_traffic):
     flight_df["flight_id"] = flight_df["flight_id"].astype(int)
     
     if use_traffic:
-        features = pd.read_parquet("./features/trafic_features_v6")#.dropna()
+        features = pd.read_parquet("./features/trafic_features_v6")
         features["flight_id"] = features["flight_id"].astype(int)
         features['takeoff_duration'] = features['takeoff_duration'].dt.total_seconds()
         flight_with_journey_df = pd.merge(flight_df, features, on="flight_id", how="left", indicator=True)
@@ -50,9 +46,8 @@ def get_data(use_traffic):
                          "icao24", "timestamp", "actual_offblock_time", "arrival_time","country_code_adep","country_code_ades","_merge",
                          ]
 
-    category_cols =["adep","ades","aircraft_type", "wtc", "airline"] # ["adep","ades",
+    category_cols =["adep", "ades", "aircraft_type", "wtc", "airline", "month", "dayofweek",]
     flight_with_journey_df = flight_with_journey_df.drop(columns=columns_to_remove, errors="ignore")
-    #flight_with_journey_df = flight_with_journey_df[flight_with_journey_df.drop(columns=['tow']).notna().all(axis=1)]
     
     for cat in category_cols:
         flight_with_journey_df[cat] = flight_with_journey_df[cat].astype("category")

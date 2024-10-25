@@ -15,12 +15,13 @@ The challenge will be scored using two datasets:
 - An additional **52,190 flights** will be used for the final ranking and prize evaluation.
 
 For more information, visit the [Data page on the challenge website](https://ansperformance.eu/study/data-challenge/).
-
 ## Table of Contents
 - [Acronyms](#acronyms)
 - [Flight List](#flight-list)
 - [Trajectory Data](#trajectory-data)
 - [Getting Started](#getting-started)
+- [Model](#model)
+- [Experiements](#run-the-experiements )
 - [Model Submission](#model-submission)
 - [License](#license)
 
@@ -199,6 +200,7 @@ For feature engineering , we tried many different approaches in general we disti
 
 * Climb & takeoff segmentation:
   This method focuses on extracting statistics from the takeoff and climb phases. In the literature, many papers confirm that the Take-Off Weight (TOW) is strongly related to the vertical rate and speed of the aircraft during the early stages of flight. Therefore, we focused on segmenting this particular phase using a handcrafted method that considers various types of noise that may occur in the data, as well as occasional missing chunks in some trajectory data.
+  The pipeline uses [ploars](https://docs.pola.rs/) optimized for speed and memory efficiency, particularly with large datasets. Polars supports lazy evaluation and parallelized operations, allowing for faster data manipulation and transformation. 
   ### Usage
   Run the script using:
   ```bash
@@ -210,14 +212,15 @@ For feature engineering , we tried many different approaches in general we disti
   - **Altitude**: The height of the aircraft above sea level, which provides insights into the flight’s elevation profile.
   - **Groundspeed**: The aircraft's speed relative to the ground, reflecting its actual travel speed over the Earth’s surface.
   - **Vertical Rate**: The rate at which the aircraft changes altitude, indicating climb or descent behaviors during the flight.
-  - **True Air Speed (TAS)**: The speed of the aircraft relative to the surrounding air, accounting for atmospheric conditions. More infos [here](https://www.researchgate.net/publication/362258965_Data-Driven_Analysis_for_Calculated_Time_Over_in_Air_Traffic_Flow_Management)
+  - **True Air Speed (TAS)**: The speed of the aircraft relative to the surrounding air, accounting for atmospheric conditions. 
+
+      ![Speed vector](assets/Geometry.jpg)
+
+      More infos [here](https://www.researchgate.net/publication/362258965_Data-Driven_Analysis_for_Calculated_Time_Over_in_Air_Traffic_Flow_Management)
   - **Groundspeed Difference**: The variation in groundspeed across the flight, highlighting speed changes and potential adjustments in flight pace.
   - **Track Deviation**: The difference between the aircraft’s planned path and actual path, showing directional stability or adjustments made during flight.
   - **Track Variance**: A measure of consistency in the aircraft’s directional changes, which provides an overview of path stability.
   - **Takeoff Duration**: The total duration of the takeoff phase, calculated as the time difference between the earliest and latest timestamps.
-
-
-
 
 ### Train description 
 Main function for model training and tuning:
