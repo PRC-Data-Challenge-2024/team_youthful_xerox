@@ -1,5 +1,9 @@
 # PRC Data Challenge - Actual TakeOff Weight (ATOW) Prediction
 
+<div style="text-align: center;">
+    <img src="assets/prc_dc24.jpeg" alt="Alt text" width="400" height="400">
+</div>
+
 ## Overview
 
 The **Performance Review Commission (PRC) Data Challenge** is designed to engage data scientists, even without an aviation background, to create teams and compete in building an open Machine Learning (ML) model. The challenge is to accurately infer the **Actual TakeOff Weight (ATOW)** of flights across Europe in 2022.
@@ -11,12 +15,13 @@ The challenge will be scored using two datasets:
 - An additional **52,190 flights** will be used for the final ranking and prize evaluation.
 
 For more information, visit the [Data page on the challenge website](https://ansperformance.eu/study/data-challenge/).
-
 ## Table of Contents
 - [Acronyms](#acronyms)
 - [Flight List](#flight-list)
 - [Trajectory Data](#trajectory-data)
 - [Getting Started](#getting-started)
+- [Model](#model)
+- [Experiements](#run-the-experiements )
 - [Model Submission](#model-submission)
 - [License](#license)
 
@@ -134,7 +139,7 @@ poetry update
 ---
 
 
-### Data
+### Dataset Access
 An access was granted to the participants of the challenge trought MinIO Client .
 The dataset files are hosted on OSN infrastructure.
 Upon registration of your team you should have received the relevant
@@ -166,6 +171,92 @@ Two additional datasets were used in this challenge:
 **Contribution:** Kambiri, Y.A. et al. (2024) ‘Energy consumption of Aircraft with new propulsion systems and storage media’, in. AIAA SCITECH 2024 Forum, American Institute of Aeronautics and Astronautics. Available at: https://doi.org/10.2514/6.2024-1707.
 
 **License:** ODbL 1.0 license
+
+## Model
+The model used in this challenge is an [XG Boost](https://xgboost.readthedocs.io/en/stable/).
+
+XGBoost is an optimized distributed gradient boosting library designed to be highly efficient, flexible and portable. XGBoost is ideal for ATOW prediction due to its ability to handle complex, non-linear relationships across these diverse features. It efficiently manages both categorical and continuous variables, which is beneficial for combining static factors like aircraft type with dynamic ones such as weather and flight parameters.
+
+## Run the experiements 
+We provide script that performs data preparation, feature engineering, and XGBoost-based regression modeling to predict the takeoff weight (TOW) of flights using Optuna for hyperparameter optimization. The final model's predictions are saved in a CSV file, and feature importance is visualized for analysis.
+Configuration File
+
+The script reads a configuration file located at `configs/credentials.json`, which must contain:
+```
+{
+    "team_name": "your_team_name",
+    "code": "your_code",
+    "output_folder": "your_output_folder"
+}
+```
+For feature engineering , we tried many different approaches in general we distinguishe between two :
+* General feature extract:
+  This is a simpler and more straightforward method for extracting features from trajectory data. In this approach, we analyze each signal in the dataset and extract basic statistics, including the mean, maximum, and standard deviation
+  ### Usage
+  Run the script using:
+  ```bash
+  python feature_extractor/general_feature_extractor.py
+  ```
+
+* Climb & takeoff segmentation:
+  This method focuses on extracting statistics from the takeoff and climb phases. In the literature, many papers confirm that the Take-Off Weight (TOW) is strongly related to the vertical rate and speed of the aircraft during the early stages of flight. Therefore, we focused on segmenting this particular phase using a handcrafted method that considers various types of noise that may occur in the data, as well as occasional missing chunks in some trajectory data.
+  The pipeline uses [ploars](https://docs.pola.rs/) optimized for speed and memory efficiency, particularly with large datasets. Polars supports lazy evaluation and parallelized operations, allowing for faster data manipulation and transformation. 
+  ### Usage
+  Run the script using:
+  ```bash
+  python feature_extractor/feature_extractor_climb_takeoff.py
+  ```
+  Note: There are some parameters in this script that were setup intuitively and they can be different depending on the dataset (vertical_rate_threshold : Threshold for vertical rate min_duration_threshold_minutes : Minimum takeoff duration in minutes). We suggested these value after an extensive analysis of the Trajectory data.
+  ### Climb and takeoff feature overview 
+  Here’s a concise description of each feature:
+  - **Altitude**: The height of the aircraft above sea level, which provides insights into the flight’s elevation profile.
+  - **Groundspeed**: The aircraft's speed relative to the ground, reflecting its actual travel speed over the Earth’s surface.
+  - **Vertical Rate**: The rate at which the aircraft changes altitude, indicating climb or descent behaviors during the flight.
+  - **True Air Speed (TAS)**: The speed of the aircraft relative to the surrounding air, accounting for atmospheric conditions. 
+
+      ![Speed vector](assets/Geometry.jpg)
+
+      More infos [here](https://www.researchgate.net/publication/362258965_Data-Driven_Analysis_for_Calculated_Time_Over_in_Air_Traffic_Flow_Management)
+  - **Groundspeed Difference**: The variation in groundspeed across the flight, highlighting speed changes and potential adjustments in flight pace.
+  - **Track Deviation**: The difference between the aircraft’s planned path and actual path, showing directional stability or adjustments made during flight.
+  - **Track Variance**: A measure of consistency in the aircraft’s directional changes, which provides an overview of path stability.
+  - **Takeoff Duration**: The total duration of the takeoff phase, calculated as the time difference between the earliest and latest timestamps.
+
+### Train description 
+Main function for model training and tuning:
+* Defines an Optuna objective function for optimizing model hyperparameters.
+* Trains an XGBoost model using the best-found parameters.
+* Evaluates the model and calculates RMSE.
+* Generates feature importance plots.
+
+Run the script using:
+```bash
+python module/xgboost_model.py
+```
+This methods can work very well on balanced dataset. But the challenge_set showed a unblaced represtation of each aircraft_type therefore we suggest a new method where instead of prediction the TOW diretly we try to predict the (mean(TOW@ChallengeSet)-TOW). This methods boosted considerable our performance in the final submission_set.
+
+Before running the train script we need some inputs that are going to be given using this script : 
+```bash
+python module/pre_processing.py
+```
+Then run the final script using:
+```bash
+python module/xgboost_mean_diff.py
+```
+On the other hand due to the class imbalance in the dataset we tought about another approach that can boost the perforamnce of the model. This approach is based on creating multiple model for multiple aircraft_types.
+Try this approach using using:
+```bash
+python module/xgboost_model_categories.py
+```
+Notes: 
+* You can re-define the sub-categories that you want to use depending on the objectives.
+* This methodes uses the xgboost_mean_diff's approach to compute TOW
+
+Our process includes a visualization for the feature importance (Top 15) that looks like this:
+
+![Feature importance F1](reporting/xgboost_feat_importance_vXXX.png)
+
+
 ## Model Submission
 
 Submit your models for evaluation through the challenge submission platform. Models will be evaluated based on their ability to accurately predict the **Actual TakeOff Weight (ATOW)** for the flights in the provided dataset. Intermediate rankings will be done using **submission_set.csv**.
