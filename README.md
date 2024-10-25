@@ -1,6 +1,8 @@
 # PRC Data Challenge - Actual TakeOff Weight (ATOW) Prediction
 
-<img src="assets/prc_dc24.jpeg" alt="Alt text" width="300" height="300">
+<div style="text-align: center;">
+    <img src="assets/prc_dc24.jpeg" alt="Alt text" width="400" height="400">
+</div>
 
 ## Overview
 
