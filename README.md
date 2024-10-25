@@ -134,7 +134,7 @@ poetry update
 ---
 
 
-### Data
+### Dataset Access
 An access was granted to the participants of the challenge trought MinIO Client .
 The dataset files are hosted on OSN infrastructure.
 Upon registration of your team you should have received the relevant
@@ -166,6 +166,12 @@ Two additional datasets were used in this challenge:
 **Contribution:** Kambiri, Y.A. et al. (2024) ‘Energy consumption of Aircraft with new propulsion systems and storage media’, in. AIAA SCITECH 2024 Forum, American Institute of Aeronautics and Astronautics. Available at: https://doi.org/10.2514/6.2024-1707.
 
 **License:** ODbL 1.0 license
+
+## Model
+The model used in this challenge is an [XG Boost](https://xgboost.readthedocs.io/en/stable/).
+
+XGBoost is an optimized distributed gradient boosting library designed to be highly efficient, flexible and portable. XGBoost is ideal for ATOW prediction due to its ability to handle complex, non-linear relationships across these diverse features. It efficiently manages both categorical and continuous variables, which is beneficial for combining static factors like aircraft type with dynamic ones such as weather and flight parameters.
+
 ## Model Submission
 
 Submit your models for evaluation through the challenge submission platform. Models will be evaluated based on their ability to accurately predict the **Actual TakeOff Weight (ATOW)** for the flights in the provided dataset. Intermediate rankings will be done using **submission_set.csv**.
