@@ -10,7 +10,7 @@ The challenge will be scored using two datasets:
 - The **submission_set.csv**, containing **105,959 flights**, will be used for ranking intermediate submissions.
 - An additional **52,190 flights** will be used for the final ranking and prize evaluation.
 
-For more information, visit the Data page on the challenge website.
+For more information, visit the [Data page on the challenge website](https://ansperformance.eu/study/data-challenge/).
 
 ## Table of Contents
 - [Acronyms](#acronyms)
@@ -135,13 +135,37 @@ poetry update
 
 
 ### Data
-An access was granted to the participants of the challenge trought MinIO Client . 
+An access was granted to the participants of the challenge trought MinIO Client .
 The dataset files are hosted on OSN infrastructure.
 Upon registration of your team you should have received the relevant
 
 * team name and ID
 * BUCKET_ACCESS_KEY and BUCKET_ACCESS_SECRET.
 
+### Additional datasets
+Two additional datasets were used in this challenge:
+- The Global Airport Database ([here](https://www.partow.net/miscellaneous/airportdatabase/))
+- CADO airplane database ([here](https://entrepot.recherche.data.gouv.fr/dataset.xhtml?persistentId=doi:10.57745/LLRJO0))
+
+#### The Global Airport Database
+
+**Description:** The Global Airport Database (GADB) is a FREE downloadable database of **9300 airports** big and small from all around the world. The database is presented in a simple token delimited format. The database provides detailed information about the airports listed including:
+- ICAO code
+- IATA code
+- Name
+- Country
+- City
+- Latitude-Longitude position
+- Altitude
+
+**License:** Mit License
+
+#### CADO airplane database
+**Description:** This database contains data of nearly **230 airplanes**. Each airplane is described by **31 parameters** such as: name, IATA code and category (general, commuter, regional, short-medium, long range), geometry, mass, max speed, typical cruise mach number, typical range, typical approach speed, take-off field length, landing field length, number of engine, type of engine, typical engine model, bypass ratio, max thrust or max power.
+
+**Contribution:** Kambiri, Y.A. et al. (2024) ‘Energy consumption of Aircraft with new propulsion systems and storage media’, in. AIAA SCITECH 2024 Forum, American Institute of Aeronautics and Astronautics. Available at: https://doi.org/10.2514/6.2024-1707.
+
+**License:** ODbL 1.0 license
 ## Model Submission
 
 Submit your models for evaluation through the challenge submission platform. Models will be evaluated based on their ability to accurately predict the **Actual TakeOff Weight (ATOW)** for the flights in the provided dataset. Intermediate rankings will be done using **submission_set.csv**.
