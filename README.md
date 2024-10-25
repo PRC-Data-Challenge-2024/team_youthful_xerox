@@ -1,5 +1,7 @@
 # PRC Data Challenge - Actual TakeOff Weight (ATOW) Prediction
 
+<img src="assets/prc_dc24.jpeg" alt="Alt text" width="300" height="300">
+
 ## Overview
 
 The **Performance Review Commission (PRC) Data Challenge** is designed to engage data scientists, even without an aviation background, to create teams and compete in building an open Machine Learning (ML) model. The challenge is to accurately infer the **Actual TakeOff Weight (ATOW)** of flights across Europe in 2022.
@@ -231,6 +233,11 @@ python module/xgboost_model_categories.py
 Notes: 
 * You can re-define the sub-categories that you want to use depending on the objectives.
 * This methodes uses the xgboost_mean_diff's approach to compute TOW
+
+Our process includes a visualization for the feature importance (Top 15) that looks like this:
+
+![Feature importance F1](reporting/xgboost_feat_importance_vXXX.png)
+
 
 ## Model Submission
 
