@@ -202,9 +202,22 @@ For feature engineering , we tried many different approaches in general we disti
   ### Usage
   Run the script using:
   ```bash
-  python feature_extractor/general_feature_extractor.py
+  python feature_extractor/feature_extractor_climb_takeoff.py
   ```
   Note: There are some parameters in this script that were setup intuitively and they can be different depending on the dataset (vertical_rate_threshold : Threshold for vertical rate min_duration_threshold_minutes : Minimum takeoff duration in minutes). We suggested these value after an extensive analysis of the Trajectory data.
+  ### Climb and takeoff feature overview 
+  Here’s a concise description of each feature:
+  - **Altitude**: The height of the aircraft above sea level, which provides insights into the flight’s elevation profile.
+  - **Groundspeed**: The aircraft's speed relative to the ground, reflecting its actual travel speed over the Earth’s surface.
+  - **Vertical Rate**: The rate at which the aircraft changes altitude, indicating climb or descent behaviors during the flight.
+  - **True Air Speed (TAS)**: The speed of the aircraft relative to the surrounding air, accounting for atmospheric conditions. More infos [here](https://www.researchgate.net/publication/362258965_Data-Driven_Analysis_for_Calculated_Time_Over_in_Air_Traffic_Flow_Management)
+  - **Groundspeed Difference**: The variation in groundspeed across the flight, highlighting speed changes and potential adjustments in flight pace.
+  - **Track Deviation**: The difference between the aircraft’s planned path and actual path, showing directional stability or adjustments made during flight.
+  - **Track Variance**: A measure of consistency in the aircraft’s directional changes, which provides an overview of path stability.
+  - **Takeoff Duration**: The total duration of the takeoff phase, calculated as the time difference between the earliest and latest timestamps.
+
+
+
 
 ### Train description 
 Main function for model training and tuning:
