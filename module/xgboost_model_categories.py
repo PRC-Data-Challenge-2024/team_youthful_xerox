@@ -7,17 +7,19 @@ from sklearn.metrics import root_mean_squared_error
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import optuna
+import glob
+import json
+import os
 
+# Load configuration
+with open('configs/credentials.json', 'r') as config_file:
+    config = json.load(config_file)
+
+# Construct the filename from config variables
+filename = f"{config['team_name']}_v3_{config['code']}.csv"
+file_path = os.path.join(config['output_folder'], filename)
 
 # # Define a mapping for aircraft categories
-# aircraft_subgroups = {
-#     "H": ["B752", "A310", "E290"],
-#     "H_bis":["A333", "B77W", "B773"],
-#     "L": ["A332", "A359", "B789", "B788"],
-#     "L_bis":["B772", "B763", "A343"],
-#     "M": ["A321", "A21N", "A20N", "BCS3", "E195", "B738", "A320", "B739", "B39M"],
-#     "S": ["B737", "BCS1", "B38M", "E190", "CRJ9", "AT76", "A319", "C56X"]
-# }
 
 aircraft_subgroups = {
     "A333": ["A333"],
@@ -157,5 +159,22 @@ def xgboost_subgroup_models(use_traffic=True):
 
     return results
 
+def fuse_cat_result(version):
+    files = glob.glob(f'../submission_files/*_v{version}.csv')
+    main_df = pd.read_csv('../data/final_submission_set.csv')
+
+    dataframes = [pd.read_csv(file) for file in files]
+    for i, df in enumerate(dataframes):
+        suffix = f'_df{i+1}'
+        # Merge the current dataframe on 'flight_id'
+        main_df = pd.merge(main_df, df[['flight_id', 'tow']], on='flight_id', how='left', suffixes=('', suffix))
+        # Fill missing values in the 'tow' column
+        main_df['tow'] = main_df['tow'].fillna(main_df[f'tow{suffix}'])
+        # Drop the extra 'tow_dfX' column to avoid clutter
+        main_df.drop(columns=[f'tow{suffix}'], inplace=True)
+    main_df[['flight_id','tow']].to_csv(file_path, index=False)
+
 if __name__ == '__main__':
+    version = 000
     xgboost_subgroup_models(use_traffic=True)
+    fuse_cat_result(version)

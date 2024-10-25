@@ -177,13 +177,13 @@ We provide script that performs data preparation, feature engineering, and XGBoo
 Configuration File
 
 The script reads a configuration file located at `configs/credentials.json`, which must contain:
-
+```
 {
     "team_name": "your_team_name",
     "code": "your_code",
     "output_folder": "your_output_folder"
 }
-
+```
 For feature engineering , we tried many different approaches in general we distinguishe between two :
 * General feature extract:
   This is a simpler and more straightforward method for extracting features from trajectory data. In this approach, we analyze each signal in the dataset and extract basic statistics, including the mean, maximum, and standard deviation
