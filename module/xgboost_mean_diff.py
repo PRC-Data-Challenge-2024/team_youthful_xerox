@@ -26,7 +26,6 @@ def explore_flight():
 
     df["month"] = pd.to_datetime(df["date"]).dt.month
     df["dayofweek"] = pd.to_datetime(df["date"]).dt.dayofweek
-    # df[["year", "week", "day"]] = pd.to_datetime(df["date"]).dt.isocalendar()
     return df
 
 
@@ -36,10 +35,10 @@ def get_data(use_traffic):
 
     if use_traffic:
         features = pd.read_parquet(
-            "./features/trafic_features_v8/all_traffic_features_climb.parquet"
-        )  # .dropna()
+            "./features/trafic_features_XX/"
+        )  
         features["flight_id"] = features["flight_id"].astype(int)
-        # features['takeoff_duration'] = features['takeoff_duration'].dt.total_seconds()
+        features['takeoff_duration'] = features['takeoff_duration'].dt.total_seconds()
         flight_with_journey_df = pd.merge(
             flight_df, features, on="flight_id", how="left", indicator=True
         )
@@ -162,9 +161,6 @@ def xgboost_experimentation(use_traffic=True):
     results_df["tow_gt"] = y_back["tow"]
     results_df["tow_pred"] = y_pred_m  # Add predictions as a new column
 
-    # Save the DataFrame to a CSV file
-    # results_df.to_csv('./reporting/result_analysis/predictions_alldata_v3.csv', index=False) #Uncomment to see the preditions on the challenge set
-
     X_submission["tow_diff"] = best_model.predict(
         X_submission.drop(
             columns=["flight_id", "mean_tow_per_aircraft_type", "tow_difference"]
@@ -184,7 +180,6 @@ def xgboost_experimentation(use_traffic=True):
     )  # Adjust as needed
     ax.figure.tight_layout()
     ax.figure.savefig("./reporting/xgboost_feat_importance_v3.png")
-
 
 if __name__ == "__main__":
     xgboost_experimentation(use_traffic=True)

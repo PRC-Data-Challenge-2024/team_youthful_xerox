@@ -14,7 +14,7 @@ with open("configs/credentials.json", "r") as config_file:
     config = json.load(config_file)
 
 # Construct the filename from config variables
-filename = f"{config['team_name']}_v3_{config['code']}.csv"
+filename = f"{config['team_name']}_vXX_{config['code']}.csv"
 file_path = os.path.join(config["output_folder"], filename)
 
 # # Define a mapping for aircraft categories
@@ -62,7 +62,6 @@ def get_data(use_traffic):
             "./features/trafic_features_v8/all_traffic_features_climb.parquet"
         )
         features["flight_id"] = features["flight_id"].astype(int)
-        # features['takeoff_duration'] = features['takeoff_duration'].dt.total_seconds()
         flight_with_journey_df = pd.merge(
             flight_df, features, on="flight_id", how="left", indicator=True
         )
@@ -218,7 +217,7 @@ def xgboost_subgroup_models(use_traffic=True):
             )
             test_df["tow"] = test_df["tow_mean"] - test_df["tow_diff_pred"]
             test_df[["flight_id", "tow"]].astype(int).to_csv(
-                f"./submission_files/team_youthful_xerox_{subgroup}_vX.csv", index=False
+                f"./submission_files/team_youthful_xerox_{subgroup}_vXX.csv", index=False
             )
 
     return results

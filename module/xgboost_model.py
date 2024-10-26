@@ -17,7 +17,6 @@ with open("configs/credentials.json", "r") as config_file:
 filename = f"{config['team_name']}_vXX_{config['code']}.csv"
 file_path = os.path.join(config["output_folder"], filename)
 
-
 def explore_flight():
     train_df = pd.read_csv("csv_set/challenge_set.csv")
     test_df = pd.read_csv("csv_set/submission_set.csv")
@@ -28,13 +27,12 @@ def explore_flight():
     df["dayofweek"] = pd.to_datetime(df["date"]).dt.dayofweek
     return df
 
-
 def get_data(use_traffic):
     flight_df = explore_flight()
     flight_df["flight_id"] = flight_df["flight_id"].astype(int)
 
     if use_traffic:
-        features = pd.read_parquet("./features/trafic_features_v6")
+        features = pd.read_parquet("./features/trafic_features_vXX")
         features["flight_id"] = features["flight_id"].astype(int)
         features["takeoff_duration"] = features["takeoff_duration"].dt.total_seconds()
         flight_with_journey_df = pd.merge(
@@ -162,7 +160,6 @@ def xgboost_experimentation(use_traffic=True):
     )  # Adjust as needed
     ax.figure.tight_layout()
     ax.figure.savefig("./reporting/xgboost_feat_importance_vXX.png")
-
 
 if __name__ == "__main__":
     xgboost_experimentation(use_traffic=True)
