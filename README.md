@@ -206,7 +206,7 @@ For feature engineering , we tried many different approaches in general we disti
   ```bash
   python feature_extractor/feature_extractor_climb_takeoff.py
   ```
-  Note: There are some parameters in this script that were setup intuitively and they can be different depending on the dataset (vertical_rate_threshold : Threshold for vertical rate min_duration_threshold_minutes : Minimum takeoff duration in minutes). We suggested these value after an extensive analysis of the Trajectory data.
+  Note: There are some parameters in this script that were setup intuitively and they can be different depending on the dataset (vertical_rate_threshold : Threshold for vertical rate min_duration_threshold_minutes : Minimum takeoff duration in minutes). We suggested these values after an extensive analysis of the Trajectory data.
   ### Climb and takeoff feature overview 
   Here’s a concise description of each feature:
   - **Altitude**: The height of the aircraft above sea level, which provides insights into the flight’s elevation profile.
@@ -233,7 +233,7 @@ Run the script using:
 ```bash
 python module/xgboost_model.py
 ```
-This methods can work very well on balanced dataset. But the challenge_set showed a unblaced represtation of each aircraft_type therefore we suggest a new method where instead of prediction the TOW diretly we try to predict the (mean(TOW@ChallengeSet)-TOW). This methods boosted considerable our performance in the final submission_set.
+This methods can work very well on balanced dataset. But the challenge_set showed a unbalanced representation of each aircraft_type therefore we suggest a new method where instead of predicting the TOW directly we try to predict the (mean(TOW@ChallengeSet)-TOW). This methods boosted considerable our performance in the final submission_set.
 
 Before running the train script we need some inputs that are going to be given using this script : 
 ```bash
@@ -243,14 +243,14 @@ Then run the final script using:
 ```bash
 python module/xgboost_mean_diff.py
 ```
-On the other hand due to the class imbalance in the dataset we tought about another approach that can boost the performance of the model. This approach is based on creating multiple models for multiple aircraft_types.
-Try this approach using using:
+On the other hand due to the class imbalance (related to aircraft type) in the dataset, we tought about another approach that can boost the performance of the model. This approach is based on creating multiple models for multiple aircraft_types.
+Try this approach using:
 ```bash
 python module/xgboost_model_categories.py
 ```
 Notes: 
 * You can re-define the sub-categories that you want to use depending on the objectives.
-* This methodes uses the xgboost_mean_diff's approach to compute TOW
+* This methodes uses the xgboost_mean_diff's approach to compute TOW.
 
 Our process includes a visualization for the feature importance (Top 15) that looks like this:
 
