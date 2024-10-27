@@ -243,7 +243,7 @@ Then run the final script using:
 ```bash
 python module/xgboost_mean_diff.py
 ```
-On the other hand due to the class imbalance (related to aircraft type) in the dataset, we tought about another approach that can boost the performance of the model. This approach is based on creating multiple models for multiple aircraft_types.
+On the other hand due to the class imbalance (related to aircraft type) in the dataset, we tought about another approach that can boost the performance of the model. This approach is based on creating a model for each group of aircraft_types.
 Try this approach using:
 ```bash
 python module/xgboost_model_categories.py
