@@ -175,7 +175,7 @@ Two additional datasets were used in this challenge:
 ## Model
 The model used in this challenge is an [XG Boost](https://xgboost.readthedocs.io/en/stable/).
 
-XGBoost is an optimized distributed gradient boosting library designed to be highly efficient, flexible and portable. XGBoost is ideal for ATOW prediction due to its ability to handle complex, non-linear relationships across these diverse features. It efficiently manages both categorical and continuous variables, which is beneficial for combining static factors like aircraft type with dynamic ones such as weather and flight parameters.
+XGBoost is an optimized distributed gradient boosting library designed to be highly efficient, flexible and portable. XGBoost is ideal for ATOW prediction due to its ability to handle complex, non-linear relationships across these diverse features. It efficiently manages both categorical and continuous variables, which is beneficial for combining static factors like aircraft type with dynamic ones such as weather and flight parameters. In addition, XGBoost supports missing values which is helpful when dealing with noisy and incomplete trajectory data.
 
 ## Run the experiements 
 We provide script that performs data preparation, feature engineering, and XGBoost-based regression modeling to predict the takeoff weight (TOW) of flights using Optuna for hyperparameter optimization. The final model's predictions are saved in a CSV file, and feature importance is visualized for analysis.
